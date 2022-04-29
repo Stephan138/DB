@@ -1,0 +1,165 @@
+use('laba8')
+
+//Вставка одной записи insertOne
+db.child.insertOne({name:'Jane'})
+
+//Вставка нескольких записей insertMany
+db.child.insertMany([
+{
+    _id_child: 3,
+    _id_hospital: 1,
+    name: {
+        first: 'Jo',
+        last: 'Lee'
+    },
+    done_date: new Date('Dec 03, 2014'),
+},
+{
+    _id_child: 2,
+    _id_hospital: 1,
+    name: {
+        first: 'Ball',
+        last: 'B'
+    },
+    done_date: new Date('Dec 03, 2012'),
+}
+])
+
+db.laba8.insertOne({"name": "Alex", "age": 28, 
+   company: {"name":"Microsoft", "country":"USA"}
+  }
+)
+
+//Удаление одной записи по условию deleteOne
+db.child.deleteOne({_id: '6268133ad57639d4a20b247b'})
+
+//Удаление нескольких записей по условию deleteMany
+db.child.deleteMany({'name.first': 'Jo' })
+
+//Поиск по ID
+db.child.findOne({_id : ObjectId("6268166b7a741731b67fa768")})
+
+//Поиск записи поатрибуту первого уровня
+db.child.findOne({'name': 'Jane'})
+
+//Поиск записи по вложенному атрибуту
+db.child.findOne({"name.last": "B"})
+
+//Поиск записи по нескольким атрибутам(логический оператор AND)
+db.hospital.findOne({$and : [{name: "hospital"}, {address: 'st.hospital'}]})
+
+//Поиск записи по одному из условий(логический оператор OR)
+db.hospital.findOne({$or : [{name: "hospital"}, {address: 'st'}]})
+
+//Поиск с использованием оператора сравнения
+db.child.find( { _id_child: { $gte: 2 } } )
+
+//Поиск с использованием двух операторов сравнения
+db.child.find( { _id_child: { $ne: 3, $gte: 2} } )
+
+//Поиск по значению в массиве
+db.done_vaccination.find({name: {$elemMatch: {name:'прививка 1', year:1975}}})
+
+//Поиск по количеству элементов в массиве
+db.done_vaccination.findOne({ name: { $size: 2}})
+
+//Поиск записей без атрибута
+db.child.findOne({ _id_hospital : null });
+
+//Изменить значение атрибута у записи
+db.child.updateOne(
+    {name: "Alex"},
+    {$set: {name: "Misty"}}
+)
+
+//Удалить атрибуту записи
+db.child.updateOne(
+  {}, 
+  {
+    $unset: {
+        done_date: ""
+    }
+})
+
+//Добавить атрибут записи
+db.child.update( 
+    {}, 
+    {'$set': {"new_attribute":"attribute_value"}}, 
+    false, 
+    true
+)
+
+db.getCollection("laba8").update( 
+{}, 
+{
+    $currentDate: {
+        "date-field-name": { $type: "date" } 
+     }
+}, 
+false, true)
+
+db.vaccination.insertMany([
+{
+    _id_vaccination: 1,
+    name: 'прививка 1',
+    compound : 'химические вещества',
+    side_effect: 'слепота',
+}])
+
+db.done_vaccination.insertMany([
+{
+    _id_vaccination: 1,
+    _id_done_vaccination: 1,
+    name: 'прививка 1',
+    done_date: new Date('Dec 03, 1924'),
+    
+}])
+
+db.done_vaccination.insertMany([
+{
+    _id_vaccination: 1,
+    _id_done_vaccination: 1,
+    done_date: new Date('Dec 03, 1924'),
+    name: [
+    {
+        name: 'прививка 1',
+        year: 1975,
+        by: 'Производитель 1'
+    },
+    {
+        award: 'привика 2',
+        year: 1977,
+        by: 'Производить 2'
+    }
+]
+    
+}])
+
+db.child.insertMany([
+{
+    _id_child: 1,
+    _id_hospital: 1,
+    name: {
+        first: 'John',
+        last: 'Backus'
+    },
+    done_date: new Date('Dec 03, 1920'),
+}])
+
+db.hospital.insertMany([
+{
+    _id_hospital: 1,
+    name: 'hospital',
+    phone: '234234',
+    address: 'st.hospital',
+}])
+
+db.doctor.insertMany([
+{
+    _id_doctor: 1,
+    name: {
+        first: 'Chop',
+        last: 'Stick'
+    },
+    phone: '09835403',
+}])
